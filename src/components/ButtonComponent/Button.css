@@ -1,0 +1,53 @@
+.btn {
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+}
+.btn:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 0 2px black,
+    0 0 0 4px black,blue;
+}
+
+
+.btn--primary {
+  border: none;
+  background-color: blue;
+  color: white;
+}
+.btn--primary:hover {
+  border: 1px solid blue;
+  background-color: #fff;
+  color: blue;
+}
+
+.btn--secondary {
+  border: 1px solid blue;
+  background-color: #fff;
+  color: blue;
+}
+.btn--secondary:hover {
+  border: none;
+  background-color: blue;
+  color: white;
+}
+
+.btn--sm {
+  width: 5rem;
+  padding: 0.8rem 0.4rem;
+}
+
+.btn--md {
+  width: 10rem;
+  padding: 1rem;
+  font-size: 18px;
+}
+
+.btn--lg{
+    width: 15rem;
+    padding: 1.5rem;
+    font-size: 18px;
+
+}
