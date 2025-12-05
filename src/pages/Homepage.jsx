@@ -1,29 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "../components/ButtonComponent/Button";
 import Modal from "../components/Modal/Modal";
 
 import "./Homepage.css";
 
 function Homepage() {
-    const [isOpen, setIsOpen] = useState(false);
-
-
+  const [isOpen, setIsOpen] = useState(false);
 
 
   return (
     <div className="section">
       <h1 className="title">Employee Management Software</h1>
       <div className="action-btns">
-          <Button variant="primary" size="md" onClick={()=>setIsOpen(true)}>
-            Add Employee
-          </Button>
-
+        <Button variant="primary" size="md" onClick={() => setIsOpen(true)}>
+          Add Employee
+        </Button>
 
         <Button variant="secondary" size="sm">
           Logout
         </Button>
       </div>
-      <Modal openModal={isOpen} closeModal={() => setIsOpen(false)}/>
+      <Modal openModal={isOpen} closeModal={() => setIsOpen(false)} />
       <br />
       <div className="table">
         <table>
