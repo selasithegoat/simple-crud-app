@@ -1,12 +1,19 @@
-import './Button.css';
+import "./Button.css";
 
-const Button = ({ children, className = '', variant = 'primary', size = 'md', ...props }) => {
-  const classNames = ['btn', `btn--${variant}`, `btn--${size}`, className]
+const Button = ({
+  children,
+  className = "",
+  onClick,
+  variant = "primary",
+  size = "md",
+  ...props
+}) => {
+  const classNames = ["btn", `btn--${variant}`, `btn--${size}`, className]
     .filter(Boolean)
-    .join(' ');
+    .join(" ");
 
   return (
-    <button className={classNames} {...props}>
+    <button className={classNames} {...props} onClick={onClick}>
       {children}
     </button>
   );
