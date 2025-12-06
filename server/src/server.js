@@ -3,6 +3,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors')
 const connectDB = require('./config/db')
+const employeeRoutes = require('./routes/employeeRoutes')
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
     res.send("Employee Management API is running!")
 })
 
+app.use('/', employeeRoutes);
 
 
 const PORT = process.env.PORT || 5000;

@@ -9,10 +9,10 @@ const {
 
 const router = Router();
 
-router.get('/', getAllEmployees);
-router.get('/:id', getEmployeeById);
-router.post('/', createEmployee);
-router.put('/:id', updateEmployee);
-router.delete('/:id', deleteEmployee);
+router.get('/employees', getAllEmployees);
+router.get('/employees/:id', getEmployeeById);
+router.post('/add-employee', createEmployee);
+router.put('/update-employee/:id', updateEmployee);
+router.delete('/delete-employee/:id', deleteEmployee);
 
 module.exports = router;
