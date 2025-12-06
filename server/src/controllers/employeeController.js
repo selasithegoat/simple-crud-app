@@ -23,7 +23,7 @@ async function getEmployeeById(req, res) {
     res.status(200).json(employee);
   } catch (e) {
     res.status(500).json({
-      message: "Couldn't get employee",
+      message: "Couldn't get employee, something went wrong!",
       error: e.message,
     });
   }
@@ -36,7 +36,7 @@ async function createEmployee(req, res) {
       .status(201)
       .json({ message: "Successfully added employee", data: employee });
   } catch (e) {
-    res.status(400).json({ message: "Couldn't add employee" });
+    res.status(400).json({ message: "Couldn't add employee, something went wrong!" });
   }
 }
 async function updateEmployee(req, res) {
@@ -51,7 +51,7 @@ async function updateEmployee(req, res) {
       .status(200)
       .json({ message: "Employee updated successfully", data: employee });
   } catch (e) {
-    res.status(400).json({ message: "Couldn't update employee" });
+    res.status(400).json({ message: "Couldn't update employee, something went wrong!" });
   }
 }
 async function deleteEmployee(req, res) {
@@ -64,9 +64,9 @@ async function deleteEmployee(req, res) {
       .status(200)
       .json({ message: "Employee deleted successfully", data: employee });
   } catch (e) {
-    res.status(400).json({ message: "Couldn't delete employee" });
+    res.status(400).json({ message: "Couldn't delete employee, something went wrong!" });
   }
-}
+};
 
 module.exports = {
   getAllEmployees,
