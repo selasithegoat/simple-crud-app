@@ -5,12 +5,34 @@ import Modal from "../components/Modal/Modal";
 
 import "./Homepage.css";
 
+
 function Homepage() {
   const [isOpen, setIsOpen] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [error, setError] = useState(null);
+
+    const deleteEmployee = async (id) => {
+      try {
+        if (!window.confirm("Are you sure you want to delete this employee?")) {
+          return;
+        }
+
+        const res = await fetch(`http://localhost:5000/delete-employee/${id}`, {
+          method: "DELETE",
+        });
+        if (res.ok) {
+          setEmployees(employees.filter(emp => emp._id !== id));
+          alert("Employee successfully deleted");
+        } else {
+          alert("Failed to delete employee");
+        }
+      } catch (err) {
+        console.error("Error deleting employee:", error);
+        alert("Error deleting employee");
+      }
+    };
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -98,6 +120,7 @@ function Homepage() {
                           variant="secondary"
                           size="sm"
                           className="table-btn"
+                          onClick={() => deleteEmployee(emp._id)}
                         >
                           Delete
                         </Button>
