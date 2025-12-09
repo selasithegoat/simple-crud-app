@@ -5,34 +5,81 @@ import Modal from "../components/Modal/Modal";
 
 import "./Homepage.css";
 
-
-function Homepage() {
+function Homepage({closeModal}) {
   const [isOpen, setIsOpen] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [error, setError] = useState(null);
 
-    const deleteEmployee = async (id) => {
-      try {
-        if (!window.confirm("Are you sure you want to delete this employee?")) {
-          return;
-        }
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    salary: "",
+  });
 
-        const res = await fetch(`http://localhost:5000/delete-employee/${id}`, {
-          method: "DELETE",
+
+  function handleInputChange(e) {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  }
+
+  async function addEmployee(e) {
+    e.preventDefault();
+
+    try {
+      const employee = await fetch("http://localhost:5000/add-employee", {
+        method: POST,
+        headers: {
+          "Content-Type": "applicaiton/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      if (res.ok) {
+        const newEmployee = await res.json();
+        setEmployees([...employes, newEmployee]);
+
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          salary: "",
+          startDate:''
         });
-        if (res.ok) {
-          setEmployees(employees.filter(emp => emp._id !== id));
-          alert("Employee successfully deleted");
-        } else {
-          alert("Failed to delete employee");
-        }
-      } catch (err) {
-        console.error("Error deleting employee:", error);
-        alert("Error deleting employee");
+        alert("Employee added successfully");
+      } else {
+        alert("Failed to add employee");
       }
-    };
+    } catch (err) {
+      console.error("Error Adding Employee", err);
+      alert("Error adding employee");
+    }
+  }
+
+  const deleteEmployee = async (id) => {
+    try {
+      if (!window.confirm("Are you sure you want to delete this employee?")) {
+        return;
+      }
+
+      const res = await fetch(`http://localhost:5000/delete-employee/${id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setEmployees(employees.filter((emp) => emp._id !== id));
+        alert("Employee successfully deleted");
+      } else {
+        alert("Failed to delete employee");
+      }
+    } catch (err) {
+      console.error("Error deleting employee:", error);
+      alert("Error deleting employee");
+    }
+  };
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -67,7 +114,7 @@ function Homepage() {
           Logout
         </Button>
       </div>
-      <Modal openModal={isOpen} closeModal={() => setIsOpen(false)} />
+
       <br />
       <div className="table">
         {isLoading && (
@@ -133,6 +180,107 @@ function Homepage() {
           </table>
         )}
       </div>
+      <Modal openModal={isOpen} closeModal={() => setIsOpen(false)}>
+        
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="header">
+              <h2>Add Employee</h2>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#000000"
+                strokeWidth="1.75"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-x-icon lucide-x"
+                onClick={closeModal}
+              >
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </div>
+            <div className="form-container">
+              <form id="employeeForm">
+                <div className="form-group">
+                  <label htmlFor="firstName">
+                    First Name <span className="required">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    placeholder="Enter first name"
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="lastName">
+                    Last Name <span className="required">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    placeholder="Enter last name"
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="email">
+                    Email <span className="required">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="employee@example.com"
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="salary">
+                    Salary <span className="required">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="salary"
+                    name="salary"
+                    onChange={handleInputChange}
+                    placeholder="$95,000"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="date">
+                    Start Date <span className="required">*</span>
+                  </label>
+                  <input type="date" id="date" name="date" required />
+                </div>
+
+                <div className="button-group">
+                  <Button variant="secondary" size="sm">
+                    Cancel
+                  </Button>
+                  <Button variant="primary" size="md">
+                    Add Employee
+                  </Button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
