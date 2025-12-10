@@ -5,7 +5,7 @@ import Modal from "../components/Modal/Modal";
 
 import "./Homepage.css";
 
-function Homepage({closeModal}) {
+function Homepage({ closeModal }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -17,8 +17,8 @@ function Homepage({closeModal}) {
     lastName: "",
     email: "",
     salary: "",
+    startDate: "",
   });
-
 
   function handleInputChange(e) {
     const { name, value } = e.target;
@@ -32,24 +32,28 @@ function Homepage({closeModal}) {
     e.preventDefault();
 
     try {
-      const employee = await fetch("http://localhost:5000/add-employee", {
-        method: POST,
+      const res = await fetch("http://localhost:5000/add-employee", {
+        method: "POST",
         headers: {
-          "Content-Type": "applicaiton/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
       if (res.ok) {
         const newEmployee = await res.json();
-        setEmployees([...employes, newEmployee]);
+      // Instead of manually adding to state, I refetched all employees
+      const fetchRes = await fetch("http://localhost:5000/employees");
+      const data = await fetchRes.json();
+      setEmployees(data);
 
         setFormData({
           firstName: "",
           lastName: "",
           email: "",
           salary: "",
-          startDate:''
+          startDate: "",
         });
+        setIsOpen(false);
         alert("Employee added successfully");
       } else {
         alert("Failed to add employee");
@@ -142,7 +146,7 @@ function Homepage({closeModal}) {
             </thead>
             <tbody>
               {employees.length === 0 ? (
-                <tr>
+                <tr key='no-employees'>
                   <td>No employees</td>
                 </tr>
               ) : (
@@ -181,7 +185,6 @@ function Homepage({closeModal}) {
         )}
       </div>
       <Modal openModal={isOpen} closeModal={() => setIsOpen(false)}>
-        
         <div className="modal-overlay">
           <div className="modal">
             <div className="header">
@@ -204,7 +207,7 @@ function Homepage({closeModal}) {
               </svg>
             </div>
             <div className="form-container">
-              <form id="employeeForm">
+              <form id="employeeForm" onSubmit={addEmployee}>
                 <div className="form-group">
                   <label htmlFor="firstName">
                     First Name <span className="required">*</span>
@@ -261,15 +264,26 @@ function Homepage({closeModal}) {
                   />
                 </div>
 
-                <div className="form-group">
+                {/* <div className="form-group">
                   <label htmlFor="date">
                     Start Date <span className="required">*</span>
                   </label>
-                  <input type="date" id="date" name="date" required />
-                </div>
+                  <input
+                    type="date"
+                    id="startDate"
+                    name="startDate"
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div> */}
 
                 <div className="button-group">
-                  <Button variant="secondary" size="sm">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setIsOpen(false)} // Add this
+                    type="button"
+                  >
                     Cancel
                   </Button>
                   <Button variant="primary" size="md">
