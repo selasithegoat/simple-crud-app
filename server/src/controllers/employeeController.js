@@ -31,14 +31,26 @@ async function getEmployeeById(req, res) {
 
 async function createEmployee(req, res) {
   try {
-    const employee = await Employee.create(req.body);
-    res
-      .status(201)
-      .json({ message: "Successfully added employee", data: employee });
+    const{ email } = req.body;
+
+    const existingEmployee = await Employee.findOne({ email: req.body.email });
+
+    if (existingEmployee) {
+      return res.status(400).json({ message: "Email already exists" });
+    } 
+      const employee = await Employee.create(req.body);
+
+      return res
+        .status(201)
+        .json({ message: "Successfully added employee", data: employee });
+    
   } catch (e) {
-    res.status(400).json({ message: "Couldn't add employee, something went wrong!" });
+    res
+      .status(400)
+      .json({ message: "Couldn't add employee, something went wrong!" });
   }
 }
+
 async function updateEmployee(req, res) {
   try {
     const employee = await Employee.findByIdAndUpdate(req.params.id, req.body, {
@@ -51,22 +63,28 @@ async function updateEmployee(req, res) {
       .status(200)
       .json({ message: "Employee updated successfully", data: employee });
   } catch (e) {
-    res.status(400).json({ message: "Couldn't update employee, something went wrong!" });
+    res
+      .status(400)
+      .json({ message: "Couldn't update employee, something went wrong!" });
   }
 }
 async function deleteEmployee(req, res) {
   try {
-    const employee = await Employee.findByIdAndDelete(req.params.id, {new:true});
+    const employee = await Employee.findByIdAndDelete(req.params.id, {
+      new: true,
+    });
     if (!employee) {
-        return res.status(404).json({ message: "Employee not found!" });
-      }
+      return res.status(404).json({ message: "Employee not found!" });
+    }
     res
       .status(200)
       .json({ message: "Employee deleted successfully", data: employee });
   } catch (e) {
-    res.status(400).json({ message: "Couldn't delete employee, something went wrong!" });
+    res
+      .status(400)
+      .json({ message: "Couldn't delete employee, something went wrong!" });
   }
-};
+}
 
 module.exports = {
   getAllEmployees,

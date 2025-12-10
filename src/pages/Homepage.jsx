@@ -30,7 +30,7 @@ function Homepage({ closeModal }) {
 
   async function addEmployee(e) {
     e.preventDefault();
-
+  
     try {
       const res = await fetch("http://localhost:5000/add-employee", {
         method: "POST",
@@ -39,30 +39,38 @@ function Homepage({ closeModal }) {
         },
         body: JSON.stringify(formData),
       });
-      if (res.ok) {
-        const newEmployee = await res.json();
-      // Instead of manually adding to state, I refetched all employees
-      const fetchRes = await fetch("http://localhost:5000/employees");
-      const data = await fetchRes.json();
-      setEmployees(data);
-
-        setFormData({
-          firstName: "",
-          lastName: "",
-          email: "",
-          salary: "",
-          startDate: "",
-        });
-        setIsOpen(false);
-        alert("Employee added successfully");
-      } else {
-        alert("Failed to add employee");
+  
+      const data = await res.json();
+  
+      // Handle server validation errors
+      if (!res.ok) {
+        alert(data.message); 
+        return;
       }
+  
+      // Success
+      const fetchRes = await fetch("http://localhost:5000/employees");
+      const employeesData = await fetchRes.json();
+      setEmployees(employeesData);
+  
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        salary: "",
+        startDate: "",
+      });
+  
+      setIsOpen(false);
+      alert("Employee added successfully");
+  
     } catch (err) {
-      console.error("Error Adding Employee", err);
-      alert("Error adding employee");
+      console.error("REAL ERROR:", err);
+      alert("Network or server error");
     }
   }
+  
+  
 
   const deleteEmployee = async (id) => {
     try {
