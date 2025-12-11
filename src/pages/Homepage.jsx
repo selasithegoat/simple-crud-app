@@ -144,8 +144,6 @@ function Homepage() {
         <Button variant="primary" size="md" onClick={openAddModal}>
           Add Employee
         </Button>
-
-        <Button variant="secondary" size="sm">Logout</Button>
       </div>
 
       <br />
